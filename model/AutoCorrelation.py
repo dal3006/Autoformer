@@ -13,9 +13,8 @@ class AutoCorrelation(nn.Module):
         # V:(B, H, L, d_v), corr:(B, H, L, V)
         B, H, L = V.shape[0], V.shape[1], V.shape[2]
         top_k = int(self.factor * math.log(L))
-        weights = torch.topk(corr, top_k, dim=2)[0]
+        weights, delays = torch.topk(corr, top_k, dim=2)
         weights = torch.softmax(weights, dim=2)  # (B, H, topK, V)
-        delays = torch.topk(corr, top_k, dim=2)[1]
 
         init_index = torch.arange(L).unsqueeze(-1).unsqueeze(0).unsqueeze(0)
         init_index = init_index.repeat(B, H, 1, V.shape[3]).to(V.device)  # (B, H, L, d_v)
