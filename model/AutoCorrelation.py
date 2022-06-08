@@ -47,7 +47,7 @@ class AutoCorrelation(nn.Module):
         res = q_fft * torch.conj(k_fft)
         corr = torch.fft.irfft(res, dim=2)  # (B, H, L, V)
 
-        self.time_delay_agg(V, corr)
+        V = self.time_delay_agg(V, corr)
 
         return V
 
