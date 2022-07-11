@@ -62,7 +62,7 @@ class EXP:
         batch_y_mark = batch_y_mark.float().to(self.device)
 
         dec_inp = torch.zeros_like(batch_y[:, -self.pred_len:, :]).float()
-        dec_inp = torch.cat([batch_x[:, -self.label_len:, :], dec_inp], dim=1).float().to(self.device)
+        dec_inp = torch.cat([batch_y[:, :self.label_len, :], dec_inp], dim=1).float().to(self.device)
 
         outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[:, -self.pred_len:, :]
         loss = self.criterion(outputs[:, -self.pred_len:, :], batch_y[:, -self.pred_len:, :])
